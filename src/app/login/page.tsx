@@ -6,16 +6,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
 
         try {
             const res = await fetch('/api/auth/login', {
@@ -37,6 +40,7 @@ export default function LoginPage() {
             router.refresh();
         } catch (err: any) {
             setError(err.message);
+            setIsLoading(false);
         }
     };
 
@@ -85,6 +89,7 @@ export default function LoginPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                disabled={isLoading}
                                 className="bg-white/50 border-gray-200 focus:bg-white focus:ring-brand-blue-muted/50 placeholder:text-gray-400"
                             />
                         </div>
@@ -97,11 +102,23 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                disabled={isLoading}
                                 className="bg-white/50 border-gray-200 focus:bg-white focus:ring-brand-blue-muted/50 placeholder:text-gray-400"
                             />
                         </div>
-                        <Button type="submit" className="w-full bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 text-white font-medium h-10 mt-2 transition-all active:scale-[0.98]">
-                            Sign In
+                        <Button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 text-white font-medium h-10 mt-2 transition-all active:scale-[0.98]"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Signing In...
+                                </>
+                            ) : (
+                                "Sign In"
+                            )}
                         </Button>
                     </form>
                 </CardContent>
