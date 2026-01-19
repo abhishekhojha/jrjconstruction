@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-export async function POST() {
+export async function POST(request: Request) {
     const cookieStore = await cookies();
 
     // Clear the auth token
@@ -11,8 +11,9 @@ export async function POST() {
         path: '/',
     });
 
-    // For a form submission redirect (if using native form action)
-    // using NextResponse.redirect would work if it was a server action or pure API.
-    // However, since it's an API route called via form action, we can redirect.
-    return NextResponse.redirect(new URL('/login', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'));
+    // Dynamic redirect based on the request URL
+    const requestUrl = new URL(request.url);
+    const redirectUrl = new URL('/login', requestUrl.origin);
+
+    return NextResponse.redirect(redirectUrl);
 }
