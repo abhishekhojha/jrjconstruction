@@ -15,5 +15,6 @@ export async function POST(request: Request) {
     const requestUrl = new URL(request.url);
     const redirectUrl = new URL('/login', requestUrl.origin);
 
-    return NextResponse.redirect(redirectUrl);
+    // Use 303 See Other to force Method GET on the redirect
+    return NextResponse.redirect(redirectUrl, { status: 303 });
 }
