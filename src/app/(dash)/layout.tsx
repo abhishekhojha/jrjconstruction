@@ -34,7 +34,7 @@ export default function DashboardLayout({
                 <aside className="w-64 bg-[#F2F3F5]/80 dark:bg-[#1E1E1E]/80 backdrop-blur-2xl border-r border-black/5 dark:border-white/5 flex-col hidden md:flex shrink-0">
                     <div className="h-16 flex items-center px-6 border-b border-slate-100 dark:border-zinc-800">
                         <div className="mr-3">
-                            <Image src="/logo_1.png" alt="Logo" width={125} height={32} className="object-contain" />
+                            <Image src="/logo_1bg.png" alt="Logo" width={125} height={32} className="object-contain" />
                         </div>
                     </div>
 
