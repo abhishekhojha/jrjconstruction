@@ -68,7 +68,7 @@ export default function LoginPage() {
                 <CardHeader className="pt-8">
                     <div className="mx-auto flex justify-center mb-6">
                         <Image
-                            src="/logo_1.png"
+                            src="/logo_1bg.png"
                             alt="Logo"
                             width={180}
                             height={60}
