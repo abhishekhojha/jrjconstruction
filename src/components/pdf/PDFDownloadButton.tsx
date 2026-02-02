@@ -13,9 +13,12 @@ export default function PDFDownloadButton({ data, fileName }: { data: QuotationD
         >
             {/* @ts-ignore - render prop types can be tricky */}
             {({ blob, url, loading, error }: any) => (
-                <Button className="w-full gap-2" disabled={loading} size="lg">
-                    <FileDown className="h-4 w-4" />
-                    {loading ? 'Generating PDF...' : 'Download PDF'}
+                <Button 
+                    className="w-full h-14 rounded-2xl bg-[#163587] hover:bg-[#163587]/90 text-white hover:scale-[1.02] transition-all duration-300 shadow-xl shadow-primary/20 font-black text-base border-none" 
+                    disabled={loading}
+                >
+                    <FileDown className="h-5 w-5 mr-3" />
+                    {loading ? 'Preparing Document...' : 'Download PDF Proposal'}
                 </Button>
             )}
         </PDFDownloadLink>
