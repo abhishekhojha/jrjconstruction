@@ -37,6 +37,8 @@
   --color-card: var(--card);
   --color-brand-teal: var(--brand-teal);
   --color-brand-blue-muted: var(--brand-blue-muted);
+  --color-brand-gradient-start: #163587;
+  --color-brand-gradient-end: #4DBEB3;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -56,10 +58,10 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: #163587;
   --primary-foreground: #ffffff;
-  --secondary: #64C6D3;
-  --secondary-foreground: #163587;
-  --brand-teal: #5DBAA7;
-  --brand-blue-muted: #6496C4;
+  --secondary: #4DBEB3;
+  --secondary-foreground: #ffffff;
+  --brand-teal: #4DBEB3;
+  --brand-blue-muted: #5A94C8;
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);

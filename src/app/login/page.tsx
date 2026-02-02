@@ -6,8 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -36,7 +35,7 @@ export default function LoginPage() {
                 throw new Error(data.error || 'Login failed');
             }
 
-            // Redirect to dashboard or home on success
+            // Redirect to dashboard on success
             router.push('/dashboard');
             router.refresh();
         } catch (err: any) {
@@ -46,61 +45,41 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center p-4 bg-cover bg-center" style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop')`, // macOS-ish gradient
-        }}>
-            {/* Overlay for better text contrast if needed, though glass card handles it well */}
-            <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
+        <div className="flex min-h-screen items-center justify-center p-4 bg-[#F8FAFC] dark:bg-zinc-950 relative overflow-hidden">
+            {/* Branded UI accents - subtle glows */}
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-secondary/10 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-primary/10 blur-[150px] rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
-            {/* Glass Card */}
-            <Card className="w-full max-w-md relative z-10 bg-white/70 dark:bg-black/60 backdrop-blur-xl border-white/20 shadow-2xl overflow-hidden">
-
-                {/* Title Bar / Window Controls */}
-                <div className="px-4 py-3 border-b border-black/5 flex items-center bg-white/30">
-                    <div className="flex space-x-2">
-                        <div className="w-3 h-3 rounded-full bg-[#FF5F56] shadow-sm border border-[#E0443E]/50"></div>
-                        <div className="w-3 h-3 rounded-full bg-[#FFBD2E] shadow-sm border border-[#DEA123]/50"></div>
-                        <div className="w-3 h-3 rounded-full bg-[#27C93F] shadow-sm border border-[#1AAB29]/50"></div>
+            <div className="w-full max-w-[420px] relative z-10 transition-all duration-500 animate-in fade-in zoom-in-95">
+                <div className="flex flex-col items-center mb-10">
+                    <div className="p-4 dark:bg-zinc-900 mb-6 hover:scale-105 transition-transform duration-300">
+                        <Image src="/logo_1bg.png" alt="Logo" width={250} height={40} className="object-contain" />
                     </div>
-                    <div className="text-xs font-medium text-gray-500 ml-4">Login</div>
+                    <h1 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Welcome Back</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Log into your JRJ Contractors account</p>
                 </div>
 
-                <CardHeader className="pt-8">
-                    <div className="mx-auto flex justify-center mb-6">
-                        <Image
-                            src="/logo_1bg.png"
-                            alt="Logo"
-                            width={180}
-                            height={60}
-                            className="object-contain"
-                            priority
-                        />
-                    </div>
-                    <CardTitle className="text-3xl text-center text-gray-800 font-semibold tracking-tight">Welcome Back</CardTitle>
-                    <CardDescription className="text-center text-gray-500">Please sign in to continue</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                <Card className="border-none rounded-[2.5rem] bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl shadow-2xl shadow-slate-200/50 dark:shadow-none p-10 border border-slate-100 dark:border-white/5">
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         {error && (
-                            <div className="p-3 text-sm text-red-600 bg-red-50/80 border border-red-200 rounded-lg">
+                            <div className="p-4 text-sm text-red-600 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 rounded-2xl animate-shake">
                                 {error}
                             </div>
                         )}
-                        <div className="space-y-2">
-                            <Label htmlFor="email" className="text-gray-700">Email</Label>
+                        <div className="space-y-2.5">
+                            <Label htmlFor="email" className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Email Address</Label>
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="admin@example.com"
+                                placeholder="name@company.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                disabled={isLoading}
-                                className="bg-white/50 border-gray-200 focus:bg-white focus:ring-brand-blue-muted/50 placeholder:text-gray-400"
+                                className="h-12 px-5 rounded-2xl bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-secondary/20 focus:border-secondary transition-all"
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password" className="text-gray-700">Password</Label>
+                        <div className="space-y-2.5">
+                            <Label htmlFor="password" className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Password</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -108,27 +87,25 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                disabled={isLoading}
-                                className="bg-white/50 border-gray-200 focus:bg-white focus:ring-brand-blue-muted/50 placeholder:text-gray-400"
+                                className="h-12 px-5 rounded-2xl bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-secondary/20 focus:border-secondary transition-all"
                             />
                         </div>
                         <Button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 text-white font-medium h-10 mt-2 transition-all active:scale-[0.98]"
+                            className="w-full bg-gradient-to-r from-primary to-primary/90 hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-xl shadow-primary/20 text-white font-black h-14 mt-4 rounded-2xl border-none text-base disabled:opacity-70"
                         >
                             {isLoading ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Signing In...
-                                </>
-                            ) : (
-                                "Sign In"
-                            )}
+                                <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            ) : 'Sign In Now'}
                         </Button>
                     </form>
-                </CardContent>
-            </Card>
+                </Card>
+
+                <p className="text-center text-[10px] text-slate-400 font-black uppercase tracking-widest mt-12">
+                    &copy; 2024 JRJ Contractors • Australia
+                </p>
+            </div>
         </div>
     );
 }

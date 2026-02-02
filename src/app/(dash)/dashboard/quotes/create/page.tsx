@@ -163,14 +163,31 @@ export default function CreateQuotePage() {
     useEffect(() => { setIsClient(true); }, []);
 
     return (
-        <div className="max-w-5xl mx-auto space-y-6">
-            <div className="flex items-center space-x-4 mb-6">
-                <Link href="/dashboard">
-                    <Button variant="ghost" size="icon">
-                        <ArrowLeft className="w-5 h-5" />
+        <div className="max-w-6xl mx-auto space-y-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-4 border-b border-slate-200/60 transition-all duration-500">
+                <div className="flex items-center space-x-6">
+                    <Link href="/dashboard">
+                        <div className="h-12 w-12 bg-white dark:bg-zinc-900 rounded-2xl flex items-center justify-center shadow-lg shadow-slate-200/40 dark:shadow-none border border-slate-100 dark:border-white/5 hover:bg-slate-50 transition-all hover:scale-105 group">
+                            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+                        </div>
+                    </Link>
+                    <div>
+                        <h1 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Create Quotation</h1>
+                        <p className="text-slate-500 dark:text-slate-400 font-medium">Drafting a new professional proposal for JRJ Contractors.</p>
+                    </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                     <Button
+                        variant="ghost"
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="h-12 px-6 rounded-2xl font-bold bg-slate-50 dark:bg-white/5 text-slate-600 hover:text-primary transition-all"
+                    >
+                        <Save className="w-5 h-5 mr-3" />
+                        {isSaving ? 'Drafting...' : 'Save Draft'}
                     </Button>
-                </Link>
-                <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Create Quotation (JRJ)</h1>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -201,18 +218,22 @@ export default function CreateQuotePage() {
                     <Card>
                         <CardHeader><CardTitle>Client Details</CardTitle></CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="space-y-2">
+                            <div className='w-full flex gap-4'>
+                                
+                            <div className="space-y-2 w-full">
                                 <Label>Name</Label>
                                 <Input value={formData.clientDetails.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClientInfo('name', e.target.value)} />
+                            </div>
+                               <div className="space-y-2 w-full">
+                                <Label>Phone</Label>
+                                <Input value={formData.clientDetails.phone} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClientInfo('phone', e.target.value)} />
+                            </div>
                             </div>
                             <div className="space-y-2">
                                 <Label>Address</Label>
                                 <Input value={formData.clientDetails.addressLine1} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClientInfo('addressLine1', e.target.value)} />
                             </div>
-                            <div className="space-y-2">
-                                <Label>Phone</Label>
-                                <Input value={formData.clientDetails.phone} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClientInfo('phone', e.target.value)} />
-                            </div>
+                         
                         </CardContent>
                     </Card>
 
@@ -241,12 +262,13 @@ export default function CreateQuotePage() {
                     </Card>
 
                     {/* Items */}
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between">
-                            <CardTitle>Items</CardTitle>
-                            <Button onClick={addItem} size="sm" variant="outline"><Plus className="w-4 h-4 mr-1" /> Add</Button>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
+                    <Card className="border-none rounded-[2.5rem] bg-white dark:bg-zinc-900 shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between px-8 py-6 border-b border-slate-50 dark:border-white/5">
+                        <CardTitle className="text-xl font-bold text-slate-800 dark:text-white">Line Items</CardTitle>
+                        <Button onClick={addItem} size="sm" variant="outline" className="rounded-2xl border-secondary/20 text-secondary hover:bg-secondary/10 hover:border-secondary/40 font-bold px-6 h-10 transition-all active:scale-95">
+                            <Plus className="w-5 h-5 mr-2" /> Add Item
+                        </Button>
+                    </CardHeader><CardContent className="space-y-6">
                             {formData.items.map((item, index) => (
                                 <div key={index} className="grid grid-cols-12 gap-3 p-4 border rounded-lg bg-slate-50/50 relative">
                                     <div className="col-span-3 space-y-2">
@@ -319,7 +341,7 @@ export default function CreateQuotePage() {
                                         <Label>Tax Type</Label>
                                         <select
                                             className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                            value={formData.taxDetails.type}
+                                            value={formData.taxDetails?.type}
                                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateTaxDetails('type', e.target.value)}
                                         >
                                             <option value="percentage">Percentage (%)</option>
@@ -327,10 +349,10 @@ export default function CreateQuotePage() {
                                         </select>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label>Value ({formData.taxDetails.type === 'percentage' ? '%' : '$'})</Label>
+                                        <Label>Value ({formData.taxDetails?.type === 'percentage' ? '%' : '$'})</Label>
                                         <Input
                                             type="number"
-                                            value={formData.taxDetails.value}
+                                            value={formData.taxDetails?.value}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateTaxDetails('value', parseFloat(e.target.value))}
                                         />
                                     </div>
@@ -339,7 +361,7 @@ export default function CreateQuotePage() {
                                     <div className="space-y-2">
                                         <Label>Description</Label>
                                         <Input
-                                            value={formData.taxDetails.description}
+                                            value={formData.taxDetails?.description}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateTaxDetails('description', e.target.value)}
                                             placeholder="GST (10%)"
                                         />
@@ -347,7 +369,7 @@ export default function CreateQuotePage() {
                                     <div className="flex items-center space-x-2 pt-8">
                                         <input
                                             type="checkbox"
-                                            checked={formData.taxDetails.displayAsSeparateRow}
+                                            checked={formData.taxDetails?.displayAsSeparateRow}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateTaxDetails('displayAsSeparateRow', e.target.checked)}
                                         />
                                         <Label>Show as Separate Row</Label>
@@ -359,50 +381,58 @@ export default function CreateQuotePage() {
                 </div>
 
                 <div className="space-y-6">
-                    <Card className="sticky top-24">
-                        <CardHeader><CardTitle>Summary</CardTitle></CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Subtotal</span>
-                                <span>${subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                            </div>
-
-                            {formData.taxDetails?.enabled && (
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">{formData.taxDetails.description}</span>
-                                    <span>${taxAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                    <div className="sticky top-24 space-y-6">
+                        <Card className="border-none rounded-[2.5rem] bg-white dark:bg-zinc-900 shadow-2xl shadow-slate-200/40 dark:shadow-none overflow-hidden relative">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-110 duration-700" />
+                            <CardHeader className="relative z-10 p-8 border-b border-slate-50 dark:border-white/5">
+                                <CardTitle className="text-xl font-bold text-slate-800 dark:text-white">Summary</CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative z-10 p-8 space-y-6">
+                                <div className="space-y-4">
+                                    <div className="flex justify-between text-sm font-medium">
+                                        <span className="text-slate-400 uppercase tracking-widest text-[10px]">Subtotal</span>
+                                        <span className="text-slate-700 dark:text-slate-300">
+                                            {isClient && subtotal.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between text-sm font-medium">
+                                        <span className="text-slate-400 uppercase tracking-widest text-[10px]">{formData.taxDetails?.description || 'Tax'}</span>
+                                        <span className="text-slate-700 dark:text-slate-300">
+                                            {isClient && taxAmount.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })}
+                                        </span>
+                                    </div>
+                                    <div className="pt-6 border-t border-slate-100 dark:border-white/5 flex justify-between items-end">
+                                        <span className="text-slate-400 uppercase tracking-widest text-[10px] pb-1">Total Amount</span>
+                                        <span className="text-3xl font-black text-primary">
+                                            {isClient && total.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })}
+                                        </span>
+                                    </div>
                                 </div>
-                            )}
 
-                            <div className="flex justify-between items-end border-t pt-4">
-                                <span className="font-bold text-lg">{formData.totalDetails.label}</span>
-                                <span className="font-bold text-2xl text-primary">${total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                            </div>
+                                {isClient && (
+                                    <div className="w-full pt-4">
+                                        <PDFDownloadButton
+                                            key={JSON.stringify(formData)}
+                                            data={formData}
+                                            fileName={`Quote_${formData.quoteDetails.quoteNumber}.pdf`}
+                                        />
+                                    </div>
+                                )}
 
-                            {isClient && (
-                                <div className="w-full pt-4">
-                                    <PDFDownloadButton
-                                        key={JSON.stringify(formData)}
-                                        data={formData}
-                                        fileName={`Quote_${formData.quoteDetails.quoteNumber}.pdf`}
-                                    />
-                                </div>
-                            )}
-                            <div className="ml-auto flex space-x-2">
                                 <Button
                                     variant="default"
                                     onClick={handleSave}
                                     disabled={isSaving}
-                                    className="bg-brand-teal hover:bg-brand-teal/90 text-white w-full py-2"
+                                    className="bg-gradient-to-r from-secondary to-secondary/90 hover:scale-[1.02] transition-all duration-300 text-white w-full py-7 rounded-2xl shadow-xl shadow-secondary/20 font-black border-none text-lg mt-4"
                                 >
-                                    <Save className="w-4 h-4 mr-1" />
-                                    {isSaving ? 'Saving...' : 'Save Quote'}
+                                    <Save className="w-5 h-5 mr-3" />
+                                    {isSaving ? 'Saving...' : 'Generate Quote'}
                                 </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 }

@@ -79,106 +79,130 @@ export default function QuotesHistoryPage() {
     };
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto space-y-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Quotations</h1>
-                    <p className="text-muted-foreground">Manage and view your quote history.</p>
+                    <h1 className="text-4xl font-black text-slate-800 dark:text-white tracking-tight">Quotations</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Manage and tracked all your construction quotes in one place.</p>
                 </div>
                 <Link href="/dashboard/quotes/create">
-                    <Button className="bg-brand-teal hover:bg-brand-teal/90 text-white gap-2">
-                        <Plus className="w-4 h-4" /> New Quote
+                    <Button className="bg-gradient-to-r from-secondary to-secondary/90 hover:scale-105 transition-all duration-300 text-white gap-2 h-12 px-6 rounded-2xl shadow-xl shadow-secondary/20 font-bold border-none">
+                        <Plus className="w-5 h-5" /> New Quotation
                     </Button>
                 </Link>
             </div>
 
             {loading ? (
-                <div className="text-center py-10 text-muted-foreground">Loading quotes...</div>
+                <div className="flex flex-col items-center justify-center py-24 space-y-4">
+                    <div className="h-12 w-12 border-4 border-secondary/20 border-t-secondary rounded-full animate-spin" />
+                    <p className="text-slate-500 font-bold animate-pulse">Loading your documents...</p>
+                </div>
             ) : quotes.length === 0 ? (
-                <Card>
-                    <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                        <FileText className="w-12 h-12 text-muted-foreground mb-4 opacity-50" />
-                        <h3 className="text-lg font-medium">No quotes found</h3>
-                        <p className="text-muted-foreground mb-4">Create your first quotation to get started.</p>
-                        <Link href="/dashboard/quotes/create">
-                            <Button variant="outline">Create Quote</Button>
-                        </Link>
-                    </CardContent>
-                </Card>
+                <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] p-20 text-center shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/5">
+                    <div className="h-24 w-24 bg-slate-50 dark:bg-white/5 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
+                        <FileText className="w-12 h-12 text-slate-300 dark:text-slate-600" />
+                    </div>
+                    <h3 className="text-2xl font-black text-slate-800 dark:text-white mb-2">No quotes discovered yet</h3>
+                    <p className="text-slate-500 dark:text-slate-400 mb-10 max-w-sm mx-auto">Start by creating your first professional quotation for your clients today.</p>
+                    <Link href="/dashboard/quotes/create">
+                        <Button className="bg-primary text-white hover:bg-primary/90 px-8 py-6 rounded-2xl font-bold transition-all hover:scale-105 border-none shadow-xl shadow-primary/20">
+                            Create First Quote
+                        </Button>
+                    </Link>
+                </div>
             ) : (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="space-y-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {quotes.map((quote) => (
-                            <Card key={quote._id} className="hover:shadow-lg transition-shadow relative group">
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">
-                                        #{quote.quoteDetails.quoteNumber}
-                                    </CardTitle>
-                                    <div className="flex items-center space-x-2">
-                                        <span className="text-xs text-muted-foreground">
-                                            {new Date(quote.createdAt!).toLocaleDateString()}
-                                        </span>
+                            <div key={quote._id} className="group relative bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-100 dark:border-white/5 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+                                {/* Subtle brand glow background */}
+                                
+                                <div className="relative z-10">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Quote Reference</span>
+                                            <span className="text-lg font-black text-slate-800 dark:text-white">#{quote.quoteDetails.quoteNumber}</span>
+                                        </div>
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-6 w-6 text-red-400 hover:text-red-600 hover:bg-red-50"
+                                            className="h-10 w-10 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-colors"
                                             onClick={(e) => handleDelete(quote._id, e)}
                                         >
-                                            <Trash2 className="w-3 h-3" />
+                                            <Trash2 className="w-5 h-5" />
                                         </Button>
                                     </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-4">
-                                        <div className="flex items-center space-x-2 text-sm">
-                                            <User className="w-4 h-4 text-muted-foreground" />
-                                            <span className="font-medium truncate">{quote.clientDetails.name}</span>
-                                        </div>
-                                        <div className="flex items-center space-x-2 text-sm">
-                                            <DollarSign className="w-4 h-4 text-muted-foreground" />
-                                            <span className="font-bold text-lg">
-                                                {quote.totalDetails?.totalAmount?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) || '$0.00'}
-                                            </span>
+
+                                    <div className="space-y-6 mb-8">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="h-10 w-10 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center">
+                                                <User className="w-5 h-5 text-slate-400" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Client</span>
+                                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate max-w-[150px]">{quote.clientDetails.name}</span>
+                                            </div>
                                         </div>
 
-                                        <div className="pt-4">
-                                            <PDFDownloadButton
-                                                key={quote._id}
-                                                data={quote}
-                                                fileName={`Quote_${quote.quoteDetails.quoteNumber}.pdf`}
-                                            />
+                                        <div className="flex items-center space-x-4">
+                                            <div className="h-10 w-10 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center">
+                                                <Calendar className="w-5 h-5 text-slate-400" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Created Date</span>
+                                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                                                    {new Date(quote.createdAt!).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="p-5 bg-slate-50 dark:bg-white/5 rounded-[1.5rem] border border-slate-100 dark:border-white/5">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Total Amount</span>
+                                            <span className="text-2xl font-black text-primary">
+                                                {quote.totalDetails?.totalAmount?.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' }) || '$0.00'}
+                                            </span>
                                         </div>
                                     </div>
-                                </CardContent>
-                            </Card>
+
+                                    <div className="pt-2">
+                                        <PDFDownloadButton
+                                            key={quote._id}
+                                            data={quote}
+                                            fileName={`Quote_${quote.quoteDetails.quoteNumber}.pdf`}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         ))}
                     </div>
 
-                    {/* Pagination */}
+                    {/* Pagination - Premium Design */}
                     {totalPages > 1 && (
-                        <div className="flex items-center justify-center space-x-4 pt-4">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setPage(p => Math.max(1, p - 1))}
-                                disabled={page === 1}
-                            >
-                                <ChevronLeft className="w-4 h-4 mr-1" /> Previous
-                            </Button>
-                            <span className="text-sm text-muted-foreground">
-                                Page {page} of {totalPages}
-                            </span>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                disabled={page === totalPages}
-                            >
-                                Next <ChevronRight className="w-4 h-4 ml-1" />
-                            </Button>
+                        <div className="flex items-center justify-center py-10">
+                            <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/5 rounded-2xl p-2 flex items-center space-x-2 shadow-xl shadow-slate-200/50 dark:shadow-none">
+                                <Button
+                                    variant="ghost"
+                                    className="rounded-xl h-10 w-10 p-0 text-slate-500 hover:text-primary hover:bg-primary/5 disabled:opacity-30"
+                                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                                    disabled={page === 1}
+                                >
+                                    <ChevronLeft className="w-5 h-5" />
+                                </Button>
+                                <div className="px-4 text-xs font-black text-slate-500 uppercase tracking-widest">
+                                    Page <span className="text-primary">{page}</span> of {totalPages}
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    className="rounded-xl h-10 w-10 p-0 text-slate-500 hover:text-primary hover:bg-primary/5 disabled:opacity-30"
+                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={page === totalPages}
+                                >
+                                    Next <ChevronRight className="w-5 h-5" />
+                                </Button>
+                            </div>
                         </div>
                     )}
-                </>
+                </div>
             )}
         </div>
     );
